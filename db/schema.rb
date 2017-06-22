@@ -10,12 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170621204835) do
+ActiveRecord::Schema.define(version: 20170622024501) do
 
   create_table "groups", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "guests", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "trip_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["trip_id"], name: "index_guests_on_trip_id"
+    t.index ["user_id"], name: "index_guests_on_user_id"
   end
 
   create_table "places", force: :cascade do |t|
@@ -29,6 +38,7 @@ ActiveRecord::Schema.define(version: 20170621204835) do
   create_table "trips", force: :cascade do |t|
     t.string "departure_time", null: false
     t.integer "seats", null: false
+    t.integer "group_id"
     t.integer "source_id"
     t.integer "destination_id"
     t.integer "driver_id"
@@ -36,6 +46,7 @@ ActiveRecord::Schema.define(version: 20170621204835) do
     t.datetime "updated_at", null: false
     t.index ["destination_id"], name: "index_trips_on_destination_id"
     t.index ["driver_id"], name: "index_trips_on_driver_id"
+    t.index ["group_id"], name: "index_trips_on_group_id"
     t.index ["source_id"], name: "index_trips_on_source_id"
   end
 
@@ -44,12 +55,14 @@ ActiveRecord::Schema.define(version: 20170621204835) do
     t.string "last_name", null: false
     t.string "phone_number", null: false
     t.integer "group_id"
+    t.integer "trip_id"
     t.integer "home_place_id"
     t.integer "work_place_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_users_on_group_id"
     t.index ["home_place_id"], name: "index_users_on_home_place_id"
+    t.index ["trip_id"], name: "index_users_on_trip_id"
     t.index ["work_place_id"], name: "index_users_on_work_place_id"
   end
 

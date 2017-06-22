@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   resources :trips
 
   post 'trips/:id/join', to: 'trips#join'
+  post 'trips/:id/leave', to: 'trips#leave'
 end

@@ -5,6 +5,7 @@ class CreateUsers < ActiveRecord::Migration[5.1]
       t.string :last_name, null: false
       t.string :phone_number, null: false
       t.belongs_to :group
+      t.belongs_to :trip
       t.references :home_place
       t.references :work_place
       t.timestamps

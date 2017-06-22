@@ -15,4 +15,5 @@ Place.create!(name: "Smart Village", latitude: "30.959236", longitude: "40.2248
 User.create!(first_name: "Abdulalh", last_name:"Medhat", phone_number: "01129444002", group_id: 1, home_place_id: 1, work_place_id: 2)
 User.create!(first_name: "User1", last_name:"One", phone_number: "01129444002", group_id: 1, home_place_id: 2, work_place_id: 3)
 User.create!(first_name: "User2", last_name:"two", phone_number: "01129444002", group_id: 1, home_place_id: 4, work_place_id: 1)
-Trip.create!(departure_time: "2016/12:00PM", source_id: 2, destination_id: 1, seats: 3, driver_id: 1)
+Trip.create!(departure_time: "2016/12:00PM", source_id: 2, destination_id: 1, seats: 3, driver_id: 1, group_id: 1)
+Guest.create!(user_id: 2, trip_id: 1)
