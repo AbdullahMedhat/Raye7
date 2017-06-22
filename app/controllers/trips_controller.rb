@@ -1,6 +1,7 @@
 class TripsController < ApplicationController
   def index
-    @trips = Trip.all
+    @user = User.find params[:user_id]
+    @trips = @user.trips
     render json: @trips
   end
 
@@ -20,6 +21,25 @@ class TripsController < ApplicationController
     @trip = Trip.find params[:id]
     @trip.destroy!
     render json: @trip
+  end
+
+  def join
+    @trip = Trip.find params[:id]
+    @user = User.find params[:user_id]
+    if @trip.driver.group_id == @user.group_id
+      if @trip.seats > 0
+        @trip.seats -= 1
+        render json: 'User has joined the trip'
+      else
+        render json: 'Seats are full for this trip'
+      end
+    else
+      render json: 'You are not in the same group'
+    end
+  end
+
+  def leave
+
   end
 
   private

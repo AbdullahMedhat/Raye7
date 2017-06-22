@@ -31,10 +31,12 @@ ActiveRecord::Schema.define(version: 20170621204835) do
     t.integer "seats", null: false
     t.integer "source_id"
     t.integer "destination_id"
-    t.integer "user_id"
+    t.integer "driver_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_trips_on_user_id"
+    t.index ["destination_id"], name: "index_trips_on_destination_id"
+    t.index ["driver_id"], name: "index_trips_on_driver_id"
+    t.index ["source_id"], name: "index_trips_on_source_id"
   end
 
   create_table "users", force: :cascade do |t|

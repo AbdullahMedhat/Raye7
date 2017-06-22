@@ -4,4 +4,6 @@ Rails.application.routes.draw do
   resources :places
   resources :users
   resources :trips
+
+  post 'trips/:id/join', to: 'trips#join'
 end

@@ -5,7 +5,7 @@ class CreateTrips < ActiveRecord::Migration[5.1]
       t.integer :seats, null: false
       t.references :source
       t.references :destination
-      t.belongs_to :user
+      t.references :driver
       t.timestamps
     end
   end
