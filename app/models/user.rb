@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   belongs_to :group
-  has_one :place
-  has_one :work_place, :foreign_key => "work_place_id", :class_name => "Place"
+  belongs_to :home_place, :class_name => 'Place'
+  belongs_to :work_place, :class_name => 'Place'
+  has_many :places
   has_many :trips
 end
