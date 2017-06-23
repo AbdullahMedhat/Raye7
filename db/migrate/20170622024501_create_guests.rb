@@ -5,5 +5,7 @@ class CreateGuests < ActiveRecord::Migration[5.1]
       t.belongs_to :trip
       t.timestamps
     end
+
+    add_index :guests,[:user_id, :trip_id], unique: true
   end
 end

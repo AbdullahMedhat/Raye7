@@ -1,19 +1,14 @@
+# Class Trip for Trips created by users for one group
 class TripsController < ApplicationController
   def index
     @user = User.find params[:user_id]
     @group = @user.group
-    render json: @group.trips.to_json(:include => [:source, :destination])
+    render json: @group.trips.to_json(include: %i[source destination])
   end
 
   def show
     @trip = Trip.find params[:id]
-    render json: @trip.to_json(:include =>[:users])
-  end
-
-  def update
-    @trip = Trip.find params[:id]
-    @trip.update! trip_params
-    render json: @trip
+    render json: @trip.to_json(include: [:users])
   end
 
   def create
@@ -28,12 +23,6 @@ class TripsController < ApplicationController
     render json: @trip
   end
 
-  def destroy
-    @trip = Trip.find params[:id]
-    @trip.destroy!
-    render json: @trip
-  end
-
   def join
     @trip = Trip.find params[:id]
     @user = User.find params[:user_id]
@@ -43,21 +32,21 @@ class TripsController < ApplicationController
         @trip.save!
         @user.trip_id = @trip.id
         @user.save!
-        @guest = Guest.new(user_id: "#{@user.id}", trip_id: "#{@trip.id}")
+        @guest = Guest.new(user_id: @user.id.to_s, trip_id: @trip.id.to_s)
         @guest.save!
         render json: @guest
       else
         render json: 'Seats are full for this trip'
       end
     else
-      render json: 'You are not in the same group'
+      render json: "You are not in the same Trip's Group"
     end
   end
 
   def leave
     @trip = Trip.find params[:id]
     @user = User.find params[:user_id]
-    @guest = Guest.where(:user_id => @user, :trip_id => @trip)
+    @guest = Guest.where(user_id: @user, trip_id: @trip)
     if @guest.nil?
       render json: 'Sorry, you are not joined this trip before'
     else
@@ -69,21 +58,28 @@ class TripsController < ApplicationController
   end
 
   def destroy
-    @trip = Trip.where(:user_id => params[:id]) 
-    
-    #delete all guest who joined this trip
-    Guest.delete_all(trip_id: @trip.id)
+    @trip = Trip.where(driver_id: params[:id])
+    # delete all guest who joined this trip
+    # Guest.delete_all(trip_id: @trip.ids)
+    # Guest.destroy_all "trip_id = #{@trip.ids}"
+    @guests = Guest.where(trip_id: params[:id]).delete_all
+    render json: @guests
 
-    #Set trip_id = Nil to all users
-    @users = User.where(:trip_id => @trip)
-    @users.trip_id = nil
+    # Set trip_id = Nil to all users
+    @users = User.where(trip_id: @trip)
+    # @users.trip_id = nil
 
-    @users.save!
-    @trip.destroy!
+    # @users.save!
+    Trip.destroy(@trip.ids)
   end
 
   private
+
   def trip_params
-    params.require(:trip).permit(:name, :departure_time, :seats, :driver_id, :source_id, :destination_id)
+    params.require(:trip).permit(
+      :name, :departure_time,
+      :seats, :driver_id,
+      :source_id, :destination_id
+    )
   end
 end

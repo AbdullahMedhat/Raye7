@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 20170622024501) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_groups_on_name", unique: true
   end
 
   create_table "guests", force: :cascade do |t|
@@ -24,6 +25,7 @@ ActiveRecord::Schema.define(version: 20170622024501) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["trip_id"], name: "index_guests_on_trip_id"
+    t.index ["user_id", "trip_id"], name: "index_guests_on_user_id_and_trip_id", unique: true
     t.index ["user_id"], name: "index_guests_on_user_id"
   end
 
@@ -33,15 +35,16 @@ ActiveRecord::Schema.define(version: 20170622024501) do
     t.string "latitude", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_places_on_name", unique: true
   end
 
   create_table "trips", force: :cascade do |t|
     t.string "departure_time", null: false
     t.integer "seats", null: false
+    t.integer "driver_id"
     t.integer "group_id"
     t.integer "source_id"
     t.integer "destination_id"
-    t.integer "driver_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["destination_id"], name: "index_trips_on_destination_id"
