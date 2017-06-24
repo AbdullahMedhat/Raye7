@@ -14,6 +14,11 @@ class GroupsController < ApplicationController
     end
   end
 
+  def show
+    group = Group.find params[:id]
+    render json: group
+  end
+
   private
 
   def group_params
