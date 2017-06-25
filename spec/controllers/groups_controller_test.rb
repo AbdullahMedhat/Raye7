@@ -16,23 +16,23 @@ RSpec.describe GroupsController, type: :controller do
       expect(response.body).to eql(group.to_json)
     end
   end
-  # context 'creation' do
-  #   it 'should create a new group and return the newly created object in json' do
-  #     post :create, params: {group: attributes_for(:group)}, format: :json
+  context 'creation' do
+    it 'should create a new group and return created object in json' do
+      post :create, params: { group: attributes_for(:group) }, format: :json
 
-  #     expect(group.count).to eql 1
+      expect(Group.count).to eql 1
 
-  #     group = group.first
-  #     expect(response.body).to eql(group.to_json)
-  #   end
+      group = Group.first
+      expect(response.body).to eql(group.to_json)
+    end
 
-  #   it 'should return bad request and the errors if validation fails' do
-  #     post :create, params: { group: attributes_for(:invalid_group) }, format: :json
-  #     group = build(:invalid_group)
-  #     group.valid?
+    it 'should return bad request and the errors if validation fails' do
+      post :create, params: { group: attributes_for(:invalid_group) }, format: :json
+      group = build(:invalid_group)
+      group.valid?
 
-  #     expect(response).to have_http_status(400)
-  #     expect(response.body).to eql(group.errors.full_messages.to_json)
-  #   end
-  # end
+      expect(response).to have_http_status(400)
+      expect(response.body).to eql(group.errors.full_messages.to_json)
+    end
+  end
 end
