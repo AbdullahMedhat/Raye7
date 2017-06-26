@@ -22,5 +22,7 @@ RSpec.describe UsersController, type: :controller do
       expect(response).to have_http_status(400)
       expect(response.body).to eql(user.errors.full_messages.to_json)
     end
+
+    it { should route(:post, '/users').to(action: :create) }
   end
 end

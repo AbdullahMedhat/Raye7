@@ -34,5 +34,9 @@ RSpec.describe GroupsController, type: :controller do
       expect(response).to have_http_status(400)
       expect(response.body).to eql(group.errors.full_messages.to_json)
     end
+
+    it { should route(:get, '/groups').to(action: :index) }
+    it { should route(:get, '/groups/1').to(action: :show, id: 1) }
+    it { should route(:post, '/groups').to(action: :create) }
   end
 end

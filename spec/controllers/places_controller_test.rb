@@ -34,5 +34,9 @@ RSpec.describe PlacesController, type: :controller do
       expect(response).to have_http_status(400)
       expect(response.body).to eql(place.errors.full_messages.to_json)
     end
+
+    it { should route(:get, '/places').to(action: :index) }
+    it { should route(:get, '/places/1').to(action: :show, id: 1) }
+    it { should route(:post, '/places').to(action: :create) }
   end
 end
