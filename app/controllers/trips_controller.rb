@@ -13,14 +13,17 @@ class TripsController < ApplicationController
 
   def create
     @trip = Trip.new trip_params
-    @user = User.find params[:driver_id]
+    @user = User.find(@trip.driver_id)
 
     @trip.group_id = @user.group_id
     @user.trip_id = @trip.id
 
-    @trip.save!
-    @user.save!
-    render json: @trip
+    if @trip.save
+      @user.save!
+      render json: @trip
+    else
+      render json: @trip.errors.full_messages, status: :bad_request
+    end
   end
 
   def join
@@ -47,7 +50,7 @@ class TripsController < ApplicationController
     @trip = Trip.find params[:id]
     @user = User.find params[:user_id]
     @guest = Guest.where(user_id: @user, trip_id: @trip)
-    if @guest.nil?
+    if @guest.empty?
       render json: 'Sorry, you are not joined this trip before'
     else
       render json: @guest
@@ -59,18 +62,18 @@ class TripsController < ApplicationController
 
   def destroy
     @trip = Trip.where(driver_id: params[:id])
-    # delete all guest who joined this trip
-    # Guest.delete_all(trip_id: @trip.ids)
-    # Guest.destroy_all "trip_id = #{@trip.ids}"
     @guests = Guest.where(trip_id: params[:id]).delete_all
-    render json: @guests
 
     # Set trip_id = Nil to all users
     @users = User.where(trip_id: @trip)
-    # @users.trip_id = nil
 
-    # @users.save!
+    # set the Relation user.trip_id to nil for users related to this trip
+    @users.each do |user|
+      user.trip_id = nil
+      user.save!
+    end
     Trip.destroy(@trip.ids)
+    render json: 'Trip deleted!'
   end
 
   private

@@ -8,4 +8,5 @@ class Trip < ApplicationRecord
   belongs_to :driver, class_name: 'User'
   has_many :guests
   has_many :users, through: :guests
+  has_many :users
 end
